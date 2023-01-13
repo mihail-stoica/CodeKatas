@@ -16,11 +16,9 @@
 
 package bnymellon.codekatas.lambdakata.ec;
 
-import java.io.IOException;
-
 import org.eclipse.collections.api.factory.Lists;
 import org.eclipse.collections.api.list.MutableList;
-import org.eclipse.collections.impl.block.procedure.checked.CheckedProcedure;
+import org.eclipse.collections.impl.block.factory.Procedures;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -33,14 +31,19 @@ public class EclipseCollectionsCheckedExceptionsTest
         MutableList<String> list = Lists.mutable.with("1", "2", "3");
         // Replace the CheckedProcedure with a call to Procedures.throwing() using
         // a lambda or method reference
-        list.forEach(new CheckedProcedure<>()
-        {
-            @Override
-            public void safeValue(String each) throws IOException
-            {
-                appendable.append(each);
-            }
-        });
+//        list.forEach(new CheckedProcedure<>()
+//        {
+//            @Override
+//            public void safeValue(String each) throws IOException
+//            {
+//                appendable.append(each);
+//            }
+//        });
+
+        // Solution
+        // By method reference: list.forEach(Procedures.throwing(appendable::append);
+        list.forEach(Procedures.throwing(each -> appendable.append(each)));
+
         Assertions.assertEquals("123", appendable.toString());
     }
 }

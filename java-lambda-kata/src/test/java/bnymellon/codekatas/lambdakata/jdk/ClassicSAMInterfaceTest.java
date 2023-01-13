@@ -16,22 +16,17 @@
 
 package bnymellon.codekatas.lambdakata.jdk;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import org.eclipse.collections.impl.block.factory.Functions;
+import org.eclipse.collections.impl.list.Interval;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-
-import org.eclipse.collections.impl.block.factory.Functions;
-import org.eclipse.collections.impl.list.Interval;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
 
 /**
  * This test will illustrate how you can use lambdas with older JDK Single Abstract Method types
@@ -48,14 +43,19 @@ public class ClassicSAMInterfaceTest
     public void comparator()
     {
         // TODO - Convert the comparator to a lambda and then to a method reference
-        var comparator = new Comparator<Integer>()
-        {
-            @Override
-            public int compare(Integer one, Integer two)
-            {
-                return one.compareTo(two);
-            }
-        };
+//        var comparator = new Comparator<Integer>()
+//        {
+//            @Override
+//            public int compare(Integer one, Integer two)
+//            {
+//                return one.compareTo(two);
+//            }
+//        };
+
+        // Solution
+        //Comparator<Integer> comparator = (x, y) -> x.compareTo(y);
+        Comparator<Integer> comparator = Integer::compareTo;
+
         Assertions.assertEquals(0, comparator.compare(1, 1));
         Assertions.assertEquals(-1, comparator.compare(1, 2));
         Assertions.assertEquals(1, comparator.compare(3, 2));
@@ -73,25 +73,33 @@ public class ClassicSAMInterfaceTest
         // Note: The following list reference is "effectively" final, which is a new feature in Java 8
         var list = new ArrayList<Integer>();
         // TODO - convert the anonymous Inner class to a lambda
-        var runnable = new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                list.add(1);
-            }
-        };
+//        var runnable = new Runnable()
+//        {
+//            @Override
+//            public void run()
+//            {
+//                list.add(1);
+//            }
+//        };
+
+        // Solution
+        Runnable runnable = () -> list.add(1);
+
         runnable.run();
         Assertions.assertEquals(List.of(1), list);
         // TODO - convert the anonymous Inner class to a lambda
-        Interval.fromTo(2, 10).run(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                list.add(1);
-            }
-        });
+//        Interval.fromTo(2, 10).run(new Runnable()
+//        {
+//            @Override
+//            public void run()
+//            {
+//                list.add(1);
+//            }
+//        });
+
+        // Solution
+        Interval.fromTo(2, 10).run(() -> list.add(1));
+
         var expectedList = Collections.nCopies(10, 1);
         Assertions.assertEquals(expectedList, list);
     }
@@ -102,14 +110,18 @@ public class ClassicSAMInterfaceTest
         // Note: The following set references is "effectively" final, which is a new feature in Java 8
         var set = new HashSet<Integer>();
         // TODO - convert the anonymous inner class to lambda
-        var callable = new Callable<Boolean>()
-        {
-            @Override
-            public Boolean call() throws Exception
-            {
-                return set.add(1);
-            }
-        };
+//        var callable = new Callable<Boolean>()
+//        {
+//            @Override
+//            public Boolean call() throws Exception
+//            {
+//                return set.add(1);
+//            }
+//        };
+
+        // Solution
+        Callable<Boolean> callable = () -> set.add(1);
+
         Assertions.assertTrue(callable.call());
         Assertions.assertEquals(Set.of(1), set);
 
